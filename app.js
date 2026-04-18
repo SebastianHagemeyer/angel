@@ -23,9 +23,14 @@
     });
 
     timeline.innerHTML = cards
-      .map(
-        (v) => `
+      .map((v) => {
+        const p = v.palette || { sky1: "#87ceeb", sky2: "#c8e6ff", g1: "#5ab552", g2: "#2f6b2b" };
+        const style = `--sky1:${p.sky1};--sky2:${p.sky2};--g1:${p.g1};--g2:${p.g2}`;
+        return `
       <article class="card era-${v.era}">
+        <div class="card-image" style="${style}">
+          <span class="icon" aria-hidden="true">${v.icon || "⛏️"}</span>
+        </div>
         <div class="card-header">
           <h3>${escape(v.version)}${
           v.codename ? ` <small style="display:block;font-size:0.7em;opacity:0.9">${escape(v.codename)}</small>` : ""
@@ -41,8 +46,8 @@
         <div class="card-meta">
           ${v.tags.map((t) => `<span class="tag">${escape(t)}</span>`).join("")}
         </div>
-      </article>`
-      )
+      </article>`;
+      })
       .join("");
 
     if (!cards.length) {
