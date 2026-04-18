@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Minecraft Major Versions — A Visual Comparison</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-inner">
+      <h1>Minecraft<br /><span class="accent">Major Versions</span></h1>
+      <p class="tagline">
+        From Cave Game to the Copper Age — every major release that shaped the
+        blocky universe, side by side.
+      </p>
+      <div class="hero-stats">
+        <div><strong id="stat-count">0</strong><span>Major Releases</span></div>
+        <div><strong>2009</strong><span>First Public Build</span></div>
+        <div><strong>300M+</strong><span>Copies Sold</span></div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="filters" aria-label="Filter releases">
+    <button class="filter active" data-filter="all">All Eras</button>
+    <button class="filter" data-filter="pre">Pre-Release (2009–2011)</button>
+    <button class="filter" data-filter="classic">Classic Era (1.0–1.8)</button>
+    <button class="filter" data-filter="modern">Modern Era (1.9–1.16)</button>
+    <button class="filter" data-filter="current">Current Era (1.17+)</button>
+    <input
+      type="search"
+      id="search"
+      placeholder="Search a version or feature…"
+      aria-label="Search"
+    />
+  </nav>
+
+  <main>
+    <section class="timeline" id="timeline"></section>
+
+    <section class="compare">
+      <h2>At-a-Glance Comparison</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Version</th>
+              <th>Year</th>
+              <th>Codename</th>
+              <th>Headline Feature</th>
+              <th>World Height</th>
+              <th>New Dimension?</th>
+            </tr>
+          </thead>
+          <tbody id="compare-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="chart">
+      <h2>Release Cadence</h2>
+      <p class="muted">Gaps between major releases (months).</p>
+      <div class="bars" id="bars"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>
+      Made for fans by a fan. Minecraft is a trademark of Mojang Studios.
+      Data compiled from public changelogs.
+    </p>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

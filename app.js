@@ -1,0 +1,123 @@
+(function () {
+  const timeline = document.getElementById("timeline");
+  const compareBody = document.getElementById("compare-body");
+  const bars = document.getElementById("bars");
+  const search = document.getElementById("search");
+  const statCount = document.getElementById("stat-count");
+  const filterButtons = document.querySelectorAll(".filter");
+
+  let activeEra = "all";
+  let query = "";
+
+  function renderCards() {
+    const q = query.trim().toLowerCase();
+    const cards = MINECRAFT_VERSIONS.filter((v) => {
+      const matchesEra = activeEra === "all" || v.era === activeEra;
+      const matchesQuery =
+        !q ||
+        v.version.toLowerCase().includes(q) ||
+        (v.codename || "").toLowerCase().includes(q) ||
+        v.features.join(" ").toLowerCase().includes(q) ||
+        v.tags.join(" ").toLowerCase().includes(q);
+      return matchesEra && matchesQuery;
+    });
+
+    timeline.innerHTML = cards
+      .map(
+        (v) => `
+      <article class="card era-${v.era}">
+        <div class="card-header">
+          <h3>${escape(v.version)}${
+          v.codename ? ` <small style="display:block;font-size:0.7em;opacity:0.9">${escape(v.codename)}</small>` : ""
+        }</h3>
+          <span class="year">${v.year}</span>
+        </div>
+        <div class="card-body">
+          <h4>${escape(v.headline)}</h4>
+          <ul>
+            ${v.features.map((f) => `<li>${escape(f)}</li>`).join("")}
+          </ul>
+        </div>
+        <div class="card-meta">
+          ${v.tags.map((t) => `<span class="tag">${escape(t)}</span>`).join("")}
+        </div>
+      </article>`
+      )
+      .join("");
+
+    if (!cards.length) {
+      timeline.innerHTML = `<p style="grid-column:1/-1;text-align:center;color:#777">
+        No versions match that filter.</p>`;
+    }
+  }
+
+  function renderTable() {
+    compareBody.innerHTML = MINECRAFT_VERSIONS.map(
+      (v) => `
+      <tr>
+        <td><strong>${escape(v.version)}</strong></td>
+        <td>${v.year}</td>
+        <td>${escape(v.codename || "—")}</td>
+        <td>${escape(v.headline)}</td>
+        <td>${v.worldHeight}</td>
+        <td>${v.newDimension ? `✔ ${escape(v.newDimension)}` : "—"}</td>
+      </tr>`
+    ).join("");
+  }
+
+  function renderBars() {
+    // Compute gap in months between consecutive releases.
+    const sorted = [...MINECRAFT_VERSIONS].sort(
+      (a, b) => new Date(a.date) - new Date(b.date)
+    );
+    const gaps = sorted.map((v, i) => {
+      if (i === 0) return { v, months: 0 };
+      const prev = new Date(sorted[i - 1].date);
+      const curr = new Date(v.date);
+      const months = Math.max(
+        1,
+        Math.round((curr - prev) / (1000 * 60 * 60 * 24 * 30))
+      );
+      return { v, months };
+    });
+
+    const max = Math.max(...gaps.map((g) => g.months));
+
+    bars.innerHTML = gaps
+      .map((g) => {
+        const h = g.months === 0 ? 8 : Math.round((g.months / max) * 190) + 10;
+        return `<div class="bar" style="height:${h}px" title="${escape(
+          g.v.version
+        )} — ${g.months} mo since previous">
+          ${g.months || ""}
+          <span class="label">${escape(g.v.version)}</span>
+        </div>`;
+      })
+      .join("");
+  }
+
+  function escape(str) {
+    return String(str).replace(/[&<>"']/g, (c) =>
+      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])
+    );
+  }
+
+  filterButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      filterButtons.forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      activeEra = btn.dataset.filter;
+      renderCards();
+    });
+  });
+
+  search.addEventListener("input", (e) => {
+    query = e.target.value;
+    renderCards();
+  });
+
+  statCount.textContent = MINECRAFT_VERSIONS.length;
+  renderCards();
+  renderTable();
+  renderBars();
+})();
