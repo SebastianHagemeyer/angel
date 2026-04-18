@@ -13,6 +13,113 @@ window.__tryNextBanner = function (img) {
   }
 };
 
+// Modal controller for expanded cards
+const ModalController = {
+  overlay: null,
+  currentVersion: null,
+
+  init() {
+    // Create modal overlay
+    this.overlay = document.createElement("div");
+    this.overlay.className = "modal-overlay";
+    this.overlay.innerHTML = '<div class="card-expanded"></div>';
+    document.body.appendChild(this.overlay);
+
+    // Close on overlay click (not card click)
+    this.overlay.addEventListener("click", (e) => {
+      if (e.target === this.overlay) {
+        this.close();
+      }
+    });
+
+    // Close on Escape key
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && this.overlay.classList.contains("active")) {
+        this.close();
+      }
+    });
+  },
+
+  open(versionData) {
+    this.currentVersion = versionData;
+    const card = this.overlay.querySelector(".card-expanded");
+    const p = versionData.palette || { sky1: "#87ceeb", sky2: "#c8e6ff", g1: "#5ab552", g2: "#2f6b2b" };
+    const bannerNames = versionData.banner ? [].concat(versionData.banner) : [];
+    const bannerUrls = buildBannerUrls(versionData.version, bannerNames);
+    const bannerImg = bannerUrls.length
+      ? `<img class="banner" src="${bannerUrls[0]}" alt="${escape(versionData.version)} banner" loading="lazy" referrerpolicy="no-referrer" data-fallbacks='${JSON.stringify(bannerUrls.slice(1)).replace(/'/g, "&#39;")}' onerror="window.__tryNextBanner(this)" />`
+      : "";
+
+    card.className = `card-expanded era-${versionData.era}`;
+    card.style.setProperty("--sky1", p.sky1);
+    card.style.setProperty("--sky2", p.sky2);
+
+    card.innerHTML = `
+      <button class="close-btn" aria-label="Close">&times;</button>
+      <div class="card-image" style="background:linear-gradient(180deg, ${p.sky1} 0%, ${p.sky2} 55%, ${p.g1} 55%, ${p.g2} 100%)">
+        <span class="version-badge" aria-hidden="true">${escape(versionData.version)}</span>
+        ${bannerImg}
+      </div>
+      <div class="card-header">
+        <h3>${escape(versionData.version)}${
+          versionData.codename ? ` <small style="display:block;font-size:0.55em;opacity:0.9;margin-top:4px">${escape(versionData.codename)}</small>` : ""
+        }</h3>
+        <span class="year">${versionData.year}</span>
+      </div>
+      <div class="card-body">
+        <h4>${escape(versionData.headline)}</h4>
+        <ul>
+          ${versionData.features.map((f) => `<li>${escape(f)}</li>`).join("")}
+        </ul>
+      </div>
+      <div class="card-meta">
+        ${versionData.tags.map((t) => `<span class="tag">${escape(t)}</span>`).join("")}
+      </div>
+      <div class="card-extra">
+        <h5>Version Details</h5>
+        <div class="stat-grid">
+          <div class="stat-item">
+            <strong>${versionData.date}</strong>
+            <span>Release Date</span>
+          </div>
+          <div class="stat-item">
+            <strong>${versionData.worldHeight}</strong>
+            <span>World Height</span>
+          </div>
+          <div class="stat-item">
+            <strong>${versionData.newDimension || "None"}</strong>
+            <span>New Dimension</span>
+          </div>
+          <div class="stat-item">
+            <strong>${versionData.icon}</strong>
+            <span>Icon</span>
+          </div>
+        </div>
+      </div>
+    `;
+
+    // Bind close button
+    card.querySelector(".close-btn").addEventListener("click", () => this.close());
+
+    // Show modal
+    this.overlay.classList.add("active");
+    document.body.classList.add("modal-open");
+  },
+
+  close() {
+    this.overlay.classList.remove("active");
+    document.body.classList.remove("modal-open");
+    this.currentVersion = null;
+  }
+};
+
+// Helper escape function for modal (defined here for modal use before IIFE)
+function escape(str) {
+  return String(str).replace(/[&<>"']/g, (c) =>
+    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])
+  );
+}
+
 // Animation utilities
 const AnimationController = {
   // Intersection Observer for scroll animations
@@ -184,6 +291,14 @@ function buildBannerUrls(version, names) {
       timeline.innerHTML = `<p style="grid-column:1/-1;text-align:center;color:#777">
         No versions match that filter.</p>`;
     }
+
+    // Add click handlers to cards
+    timeline.querySelectorAll(".card").forEach((cardEl, index) => {
+      cardEl.style.cursor = "pointer";
+      cardEl.addEventListener("click", () => {
+        ModalController.open(cards[index]);
+      });
+    });
   }
 
   function renderTable() {
@@ -251,7 +366,8 @@ function buildBannerUrls(version, names) {
     renderCards();
   });
 
-  // Initialize animations
+  // Initialize modal and animations
+  ModalController.init();
   AnimationController.init();
 
   // Animate stat counter
