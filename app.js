@@ -25,11 +25,15 @@
     timeline.innerHTML = cards
       .map((v) => {
         const p = v.palette || { sky1: "#87ceeb", sky2: "#c8e6ff", g1: "#5ab552", g2: "#2f6b2b" };
-        const style = `--sky1:${p.sky1};--sky2:${p.sky2};--g1:${p.g1};--g2:${p.g2}`;
+        const style = `background:linear-gradient(180deg, ${p.sky1} 0%, ${p.sky2} 55%, ${p.g1} 55%, ${p.g2} 100%)`;
+        const bannerImg = v.banner
+          ? `<img class="banner" src="https://minecraft.wiki/w/Special:FilePath/${encodeURIComponent(v.banner)}" alt="${escape(v.version)} banner" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()" />`
+          : "";
         return `
       <article class="card era-${v.era}">
         <div class="card-image" style="${style}">
           <span class="icon" aria-hidden="true">${v.icon || "⛏️"}</span>
+          ${bannerImg}
         </div>
         <div class="card-header">
           <h3>${escape(v.version)}${

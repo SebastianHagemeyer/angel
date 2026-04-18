@@ -161,6 +161,7 @@ const MINECRAFT_VERSIONS = [
     tags: ["Redstone"],
     icon: "🔴",
     palette: { sky1: "#c1292e", sky2: "#7a1518", g1: "#5a1a1a", g2: "#1a0808" },
+    banner: "Redstone Update.png",
   },
   {
     version: "1.6",
@@ -179,6 +180,7 @@ const MINECRAFT_VERSIONS = [
     tags: ["Mobs"],
     icon: "🐴",
     palette: { sky1: "#b5cf7a", sky2: "#7ea84c", g1: "#6b4a2a", g2: "#3a2818" },
+    banner: "Horse Update.png",
   },
   {
     version: "1.7",
@@ -197,6 +199,7 @@ const MINECRAFT_VERSIONS = [
     tags: ["Biomes", "World-gen"],
     icon: "🌈",
     palette: { sky1: "#ffd27a", sky2: "#88c4ff", g1: "#3a8a3a", g2: "#6a4628" },
+    banner: "The Update that Changed the World.png",
   },
   {
     version: "1.8",
@@ -215,6 +218,7 @@ const MINECRAFT_VERSIONS = [
     tags: ["Oceans", "Building"],
     icon: "🐟",
     palette: { sky1: "#88c4ff", sky2: "#2b6dbf", g1: "#1a3a6a", g2: "#0a1a3a" },
+    banner: "Bountiful Update.png",
   },
   {
     version: "1.9",
@@ -233,6 +237,7 @@ const MINECRAFT_VERSIONS = [
     tags: ["Combat", "Elytra"],
     icon: "⚔️",
     palette: { sky1: "#1a0f2a", sky2: "#3a2a5a", g1: "#b09e7a", g2: "#5a4a30" },
+    banner: "Combat Update.png",
   },
   {
     version: "1.10",
@@ -251,6 +256,7 @@ const MINECRAFT_VERSIONS = [
     tags: ["Mobs"],
     icon: "🐻‍❄️",
     palette: { sky1: "#cfe8ff", sky2: "#8fb8e8", g1: "#e0e9f2", g2: "#a8b8c8" },
+    banner: "Frostburn Update.png",
   },
   {
     version: "1.11",
@@ -269,6 +275,7 @@ const MINECRAFT_VERSIONS = [
     tags: ["Exploration"],
     icon: "🏰",
     palette: { sky1: "#2a2e3a", sky2: "#4a5260", g1: "#6e4a2a", g2: "#3a2818" },
+    banner: "Exploration Update.png",
   },
   {
     version: "1.12",
@@ -287,6 +294,7 @@ const MINECRAFT_VERSIONS = [
     tags: ["Color", "Building"],
     icon: "🎨",
     palette: { sky1: "#ffbfd8", sky2: "#b0a0ff", g1: "#70c88a", g2: "#2a6a4a" },
+    banner: "World of Color Update.png",
   },
   {
     version: "1.13",
@@ -305,6 +313,7 @@ const MINECRAFT_VERSIONS = [
     tags: ["Oceans"],
     icon: "🐬",
     palette: { sky1: "#a8e0ff", sky2: "#2b8fbf", g1: "#124a6a", g2: "#06243a" },
+    banner: "Update Aquatic.png",
   },
   {
     version: "1.14",
@@ -323,6 +332,7 @@ const MINECRAFT_VERSIONS = [
     tags: ["Villages", "Raids"],
     icon: "🛖",
     palette: { sky1: "#c9e0a0", sky2: "#8ab560", g1: "#8a5a2e", g2: "#4a2e18" },
+    banner: "Village & Pillage.png",
   },
   {
     version: "1.15",
@@ -341,6 +351,7 @@ const MINECRAFT_VERSIONS = [
     tags: ["Bees"],
     icon: "🐝",
     palette: { sky1: "#ffe89a", sky2: "#f0b24a", g1: "#5a8a2a", g2: "#2a4a15" },
+    banner: "Buzzy Bees.png",
   },
   {
     version: "1.16",
@@ -359,6 +370,7 @@ const MINECRAFT_VERSIONS = [
     tags: ["Nether", "Netherite"],
     icon: "🔥",
     palette: { sky1: "#6a1818", sky2: "#c13018", g1: "#3a0a0a", g2: "#1a0202" },
+    banner: "Nether Update.png",
   },
   {
     version: "1.17",
@@ -377,6 +389,7 @@ const MINECRAFT_VERSIONS = [
     tags: ["Mobs", "Caves"],
     icon: "🦎",
     palette: { sky1: "#ffb0c8", sky2: "#ef6a9a", g1: "#7a4a88", g2: "#3a1e4a" },
+    banner: "Caves & Cliffs.png",
   },
   {
     version: "1.18",
@@ -395,6 +408,7 @@ const MINECRAFT_VERSIONS = [
     tags: ["Caves", "World-gen"],
     icon: "🕳️",
     palette: { sky1: "#3a3630", sky2: "#6a5e50", g1: "#2a2622", g2: "#0e0c08" },
+    banner: "Caves & Cliffs.png",
   },
   {
     version: "1.19",
@@ -413,6 +427,7 @@ const MINECRAFT_VERSIONS = [
     tags: ["Deep Dark", "Warden"],
     icon: "🐸",
     palette: { sky1: "#0a2a3a", sky2: "#1a5e6a", g1: "#0a3a2a", g2: "#04180e" },
+    banner: "The Wild Update.png",
   },
   {
     version: "1.20",
@@ -431,6 +446,7 @@ const MINECRAFT_VERSIONS = [
     tags: ["Archaeology", "Customization"],
     icon: "🌸",
     palette: { sky1: "#ffd8e8", sky2: "#ff9ab8", g1: "#b86a80", g2: "#5e2e3e" },
+    banner: "Trails & Tales.png",
   },
   {
     version: "1.21",
@@ -449,6 +465,7 @@ const MINECRAFT_VERSIONS = [
     tags: ["Combat", "Dungeons"],
     icon: "🗝️",
     palette: { sky1: "#ffd06a", sky2: "#c08830", g1: "#5a4018", g2: "#1a1008" },
+    banner: "Tricky Trials.png",
   },
   {
     version: "1.22",
