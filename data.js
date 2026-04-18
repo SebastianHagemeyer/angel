@@ -17,6 +17,7 @@ const MINECRAFT_VERSIONS = [
     tags: ["Alpha", "Prototype"],
     icon: "🧱",
     palette: { sky1: "#9aa0a6", sky2: "#cfd2d6", g1: "#6e6e6e", g2: "#3a3a3a" },
+    banner: ["Java Edition Classic.png", "Minecraft Classic.png", "Classic 0.0.23a_01.png", "Classic.png"],
   },
   {
     version: "Indev / Infdev",
@@ -35,6 +36,7 @@ const MINECRAFT_VERSIONS = [
     tags: ["Survival", "Crafting"],
     icon: "⛏️",
     palette: { sky1: "#6a5a48", sky2: "#a48a6a", g1: "#5a4030", g2: "#2a1a10" },
+    banner: ["Java Edition Indev.png", "Minecraft Indev.png", "Infdev.png", "Indev 20091223-2.png", "Java Edition Infdev.png"],
   },
   {
     version: "Alpha 1.2",
