@@ -1,3 +1,18 @@
+window.__tryNextBanner = function (img) {
+  try {
+    const list = JSON.parse(img.dataset.fallbacks || "[]");
+    if (list.length) {
+      const next = list.shift();
+      img.dataset.fallbacks = JSON.stringify(list);
+      img.src = next;
+    } else {
+      img.remove();
+    }
+  } catch (e) {
+    img.remove();
+  }
+};
+
 (function () {
   const timeline = document.getElementById("timeline");
   const compareBody = document.getElementById("compare-body");
@@ -26,8 +41,12 @@
       .map((v) => {
         const p = v.palette || { sky1: "#87ceeb", sky2: "#c8e6ff", g1: "#5ab552", g2: "#2f6b2b" };
         const style = `background:linear-gradient(180deg, ${p.sky1} 0%, ${p.sky2} 55%, ${p.g1} 55%, ${p.g2} 100%)`;
-        const bannerImg = v.banner
-          ? `<img class="banner" src="https://minecraft.wiki/w/Special:FilePath/${encodeURIComponent(v.banner)}" alt="${escape(v.version)} banner" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()" />`
+        const bannerNames = v.banner ? [].concat(v.banner) : [];
+        const bannerUrls = bannerNames.map(
+          (n) => "https://minecraft.wiki/w/Special:FilePath/" + encodeURIComponent(n)
+        );
+        const bannerImg = bannerUrls.length
+          ? `<img class="banner" src="${bannerUrls[0]}" alt="${escape(v.version)} banner" loading="lazy" referrerpolicy="no-referrer" data-fallbacks='${JSON.stringify(bannerUrls.slice(1)).replace(/'/g, "&#39;")}' onerror="window.__tryNextBanner(this)" />`
           : "";
         return `
       <article class="card era-${v.era}">
