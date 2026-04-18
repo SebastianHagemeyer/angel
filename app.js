@@ -13,6 +13,87 @@ window.__tryNextBanner = function (img) {
   }
 };
 
+// Animation utilities
+const AnimationController = {
+  // Intersection Observer for scroll animations
+  observer: null,
+
+  init() {
+    this.observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("animate-in");
+            // Unobserve after animation triggers (optional)
+            // this.observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: "0px 0px -50px 0px" }
+    );
+  },
+
+  observe(elements) {
+    if (!this.observer) this.init();
+    elements.forEach((el) => this.observer.observe(el));
+  },
+
+  // Animated counter
+  animateCounter(element, target, duration = 1500) {
+    const start = 0;
+    const startTime = performance.now();
+
+    const update = (currentTime) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      // Ease out cubic
+      const easeOut = 1 - Math.pow(1 - progress, 3);
+      const current = Math.floor(start + (target - start) * easeOut);
+      element.textContent = current;
+
+      if (progress < 1) {
+        requestAnimationFrame(update);
+      } else {
+        element.textContent = target;
+      }
+    };
+
+    requestAnimationFrame(update);
+  },
+
+  // Create floating particles
+  createParticles(container, count = 15) {
+    const colors = [
+      "rgba(255, 255, 255, 0.6)",
+      "rgba(255, 194, 26, 0.5)", // gold
+      "rgba(77, 219, 232, 0.5)", // diamond
+      "rgba(90, 181, 82, 0.5)",  // grass
+    ];
+
+    for (let i = 0; i < count; i++) {
+      const particle = document.createElement("div");
+      particle.className = "particle";
+      particle.style.cssText = `
+        left: ${Math.random() * 100}%;
+        width: ${4 + Math.random() * 8}px;
+        height: ${4 + Math.random() * 8}px;
+        background: ${colors[Math.floor(Math.random() * colors.length)]};
+        animation-duration: ${8 + Math.random() * 12}s;
+        animation-delay: ${Math.random() * -20}s;
+      `;
+      container.appendChild(particle);
+    }
+  },
+
+  // Stagger animation for multiple elements
+  staggerAnimate(elements, baseDelay = 50) {
+    elements.forEach((el, index) => {
+      el.style.animationDelay = `${index * baseDelay}ms`;
+      el.classList.add("animate-in");
+    });
+  }
+};
+
 const BANNER_HOSTS = [
   "https://minecraft.wiki/w/Special:FilePath/",
   "https://minecraft.fandom.com/wiki/Special:FilePath/",
@@ -170,8 +251,52 @@ function buildBannerUrls(version, names) {
     renderCards();
   });
 
-  statCount.textContent = MINECRAFT_VERSIONS.length;
+  // Initialize animations
+  AnimationController.init();
+
+  // Animate stat counter
+  AnimationController.animateCounter(statCount, MINECRAFT_VERSIONS.length, 2000);
+
+  // Create floating particles in hero
+  const hero = document.querySelector(".hero");
+  if (hero) {
+    AnimationController.createParticles(hero, 20);
+  }
+
+  // Initial render
   renderCards();
   renderTable();
   renderBars();
+
+  // Observe sections for scroll animations
+  const compare = document.querySelector(".compare");
+  const chart = document.querySelector(".chart");
+  if (compare) AnimationController.observe([compare]);
+  if (chart) AnimationController.observe([chart]);
+
+  // Observe cards after render
+  function observeCards() {
+    requestAnimationFrame(() => {
+      const cards = document.querySelectorAll(".card:not(.animate-in)");
+      AnimationController.observe(cards);
+    });
+  }
+
+  // Observe bars after render
+  function observeBars() {
+    requestAnimationFrame(() => {
+      const barElements = document.querySelectorAll(".bar:not(.animate-in)");
+      AnimationController.observe(barElements);
+    });
+  }
+
+  observeCards();
+  observeBars();
+
+  // Re-observe cards when filters change
+  const originalRenderCards = renderCards;
+  renderCards = function() {
+    originalRenderCards();
+    observeCards();
+  };
 })();
